@@ -33,11 +33,11 @@
                     <i class="fas fa-home"></i> Dashboard
                 </a>
             </li>
-            {{-- <li>
-                <a href="{{ route('show_package_subscription') }}" class="{{ request()->routeIs('show_package_subscription') ? 'active' : '' }}">
-                    <i class="fas fa-box"></i> Package
+            <li>
+                <a href="{{ route('product') }}" class="{{ request()->routeIs('product*') ? 'active' : '' }}">
+                    <i class="fas fa-shopping-bag"></i> Products
                 </a>
-            </li> --}}
+            </li>
             <li>
                 <form method="POST" action="{{ route('logout_vendor') }}" id="logout-form">
                     @csrf

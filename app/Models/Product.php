@@ -29,7 +29,7 @@ class Product extends Model
     {
         return $this->belongsTo(Department::class);
     }
-    
+
     public function images()
     {
         return $this->hasMany(ProductImage::class);
@@ -38,5 +38,10 @@ class Product extends Model
     public function mainImage()
     {
         return $this->hasOne(ProductImage::class)->where('is_main', true);
+    }
+
+    public function attributeValues()
+    {
+        return $this->hasMany(ProductAttributeValue::class);
     }
 }

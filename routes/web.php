@@ -11,6 +11,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\StripeController;
 use App\Http\Controllers\StripeWebhookController;
 use App\Http\Controllers\Vendor\DashboardVendorController;
+use App\Http\Controllers\Vendor\ProductController;
 use App\Http\Controllers\Vendor\SubmitDepartmentController;
 use Illuminate\Support\Facades\Route;
 
@@ -79,6 +80,15 @@ Route::middleware(["vendor"])->group(function(){
     // Dashboard
     Route::get("/dashboard/vendor", [DashboardVendorController::class, "index"])->name("dashboard_vendor");
     Route::post("/logout/vendor", [LoginController::class, "logoutVendor"])->name("logout_vendor");
+
+    // Product
+    Route::get("/dashboard/vendor/all-products",[ProductController::class, "index"])->name("product");
+    Route::get("/dashboard/vendor/product/create",[ProductController::class, "create"])->name("product.create");
+    Route::post("/dashboard/vendor/product/store",[ProductController::class, "store"])->name("product.store");
+    Route::get("/dashboard/vendor/product/show/{id}",[ProductController::class, "show"])->name("product.show");
+    Route::get("/dashboard/vendor/product/edit/{id}",[ProductController::class, "edit"])->name("product.edit");
+    Route::put("/dashboard/vendor/update/{id}",[ProductController::class, "update"])->name("product.update");
+    Route::delete("/dashboard/vendor/product/delete/{id}",[ProductController::class, "destroy"])->name("product.delete");
 });
 
 // Client

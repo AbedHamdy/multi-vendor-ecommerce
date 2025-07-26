@@ -29,7 +29,7 @@
                         @if ($package)
                             <p><strong>Name:</strong> {{ $package->name }}</p>
                             <p><strong>Price:</strong> {{ $package->price }} {{ $package->currency ?? 'EGP' }}</p>
-                            <p><strong>Duration:</strong> {{ $package->duration }} days</p>
+                            <p><strong>Duration:</strong> {{ $package->duration }} Month</p>
                             <p><strong>Number of Features:</strong> {{ count($package->features ?? []) }}</p>
                         @else
                             <p class="text-danger">No package subscription yet.</p>
