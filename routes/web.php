@@ -5,6 +5,8 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\Admin\PackageController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Client\DepartmentController as ClientDepartmentController;
+use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\PackagesController;
 use App\Http\Controllers\Client\VendorController;
 use App\Http\Controllers\PaymentController;
@@ -26,9 +28,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-})->name("home");
+// Route::get('/', function () {
+//     return view('welcome');
+// })->name("home");
+
+Route::get("/", [HomeController::class, "index"])->name("home");
 
 Route::get("/login", [LoginController::class, "index"])->name("login");
 Route::post("/login/check", [LoginController::class, "check"])->name("check_credentials");
@@ -95,6 +99,7 @@ Route::middleware(["vendor"])->group(function(){
 Route::get("/all-packages", [PackagesController::class, "index"])->name("view_packages");
 Route::get("/package/details/{id}", [PackagesController::class, "show"])->name("details_package");
 Route::get("/package/subscribe/{id}", [PackagesController::class, "subscribe"])->name("subscribe_package");
+Route::get("/all-departments", [ClientDepartmentController::class, "index"])->name("view_department");
 
 
 

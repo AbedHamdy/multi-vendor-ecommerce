@@ -24,14 +24,14 @@
                     <i class="icon-bars"></i>
                 </button>
 
-                <a href="index.html" class="logo">
-                    <img src="{{ asset("images/logo.png") }}" alt="Molla Logo" width="105" height="25">
+                <a href="{{ route("home") }}" class="logo">
+                    <img src="{{ asset("images/icons/Bazario-logo-transparent.png") }}" alt="Bazario Logo" width="105" height="25">
                 </a>
 
                 <nav class="main-nav">
                     <ul class="menu sf-arrows">
                         <li class="megamenu-container active">
-                            <a href="index.html" class="sf-with-ul">Home</a>
+                            <a href="{{ route("home") }}" class="sf-with-ul">Home</a>
 
                             <div class="megamenu demo">
                                 <div class="menu-col">
