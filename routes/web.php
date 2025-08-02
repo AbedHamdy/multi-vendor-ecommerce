@@ -12,6 +12,7 @@ use App\Http\Controllers\Client\VendorController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\StripeController;
 use App\Http\Controllers\StripeWebhookController;
+use App\Http\Controllers\Vendor\CouponController;
 use App\Http\Controllers\Vendor\DashboardVendorController;
 use App\Http\Controllers\Vendor\ProductController;
 use App\Http\Controllers\Vendor\SubmitDepartmentController;
@@ -93,6 +94,16 @@ Route::middleware(["vendor"])->group(function(){
     Route::get("/dashboard/vendor/product/edit/{id}",[ProductController::class, "edit"])->name("product.edit");
     Route::put("/dashboard/vendor/update/{id}",[ProductController::class, "update"])->name("product.update");
     Route::delete("/dashboard/vendor/product/delete/{id}",[ProductController::class, "destroy"])->name("product.delete");
+
+    // Coupon
+    Route::get("/dashboard/vendor/all-coupons", [CouponController::class, "index"])->name("coupon");
+    Route::get("/dashboard/vendor/coupon/create", [CouponController::class, "create"])->name("coupon.create");
+    Route::get('/dashboard/vendor/products/search', [ProductController::class, 'search'])->name('vendor.products.search');
+    Route::post("/dashboard/vendor/coupon/store", [CouponController::class, "store"])->name("coupon.store");
+    Route::get("/dashboard/vendor/coupon/show/{id}", [CouponController::class, "show"])->name("coupon.show");
+    Route::get("/dashboard/vendor/coupon/edit/{id}", [CouponController::class, "edit"])->name("coupon.edit");
+    Route::put("/dashboard/vendor/coupon/update/{id}", [CouponController::class, "update"])->name("coupon.update");
+    Route::delete("/dashboard/vendor/coupon/delete/{id}", [CouponController::class, "destroy"])->name("coupon.delete");
 });
 
 // Client

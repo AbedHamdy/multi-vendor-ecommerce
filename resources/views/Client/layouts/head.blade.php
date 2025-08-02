@@ -7,10 +7,10 @@
 <meta name="Abed" content="p-themes">
 <!-- Favicon -->
 <link rel="apple-touch-icon" sizes="180x180" href="{{ asset("images/icons/Bazario-logo.png") }}">
-<link rel="icon" type="image/png" sizes="32x32" href="{{ asset("images/icons/favicon-32x32.png") }}">
-<link rel="icon" type="image/png" sizes="16x16" href="{{ asset("images/icons/favicon-16x16.png") }}">
+<link rel="icon" type="image/png" sizes="32x32" href="{{ asset("images/icons/logo (1).svg") }}">
+<link rel="icon" type="image/png" sizes="16x16" href="{{ asset("images/icons/logo (1).svg") }}">
 <link rel="manifest" href="{{ asset("images/icons/site.webmanifest") }}">
-<link rel="mask-icon" href="{{ asset("images/icons/safari-pinned-tab.svg") }}" color="#666666">
+<link rel="mask-icon" href="{{ asset("images/icons/logo (1).svg") }}" color="#666666">
 <link rel="shortcut icon" href="{{ asset("images/icons/logo (1).svg") }}">
 <meta name="apple-mobile-web-app-title" content="Bazario">
 <meta name="application-name" content="Bazario">

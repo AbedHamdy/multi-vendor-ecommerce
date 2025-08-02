@@ -39,6 +39,11 @@
                 </a>
             </li>
             <li>
+                <a href="{{ route('coupon') }}" class="{{ request()->routeIs('coupon*') ? 'active' : '' }}">
+                    <i class="fas fa-ticket"></i> Coupons
+                </a>
+            </li>
+            <li>
                 <form method="POST" action="{{ route('logout_vendor') }}" id="logout-form">
                     @csrf
                     <button type="submit" class="btn w-100 text-start {{ request()->routeIs('logout_vendor') ? 'active' : '' }}"
