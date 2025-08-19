@@ -17,6 +17,11 @@
                 </a>
             </li>
             <li>
+                <a href="{{ route('vendor') }}" class="{{ request()->routeIs('vendor*') ? 'active' : '' }}">
+                    <i class="fas fa-users"></i> Vendor
+                </a>
+            </li>
+            <li>
                 <form method="POST" action="{{ route('logout') }}" id="logout-form">
                     @csrf
                     <button type="submit" class="btn w-100 text-start {{ request()->routeIs('logout') ? 'active' : '' }}"

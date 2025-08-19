@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Stripe\Coupon;
+
 
 class Vendor extends Authenticatable
 {
@@ -17,6 +17,7 @@ class Vendor extends Authenticatable
         "password",
         "department_id",
         "package_id",
+        "status",
     ];
 
     public function department()

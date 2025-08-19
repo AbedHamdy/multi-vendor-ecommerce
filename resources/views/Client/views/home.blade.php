@@ -37,7 +37,7 @@
                     <ul class="menu">
                         <li><a href="{{ route('view_packages') }}" class="goto-demos">Package</a></li>
                         <li><a href="{{ route('login') }}" class="goto-features">Login</a></li>
-                        <li><a href="{{ route('view_department') }}" class="goto-elements">Departments</a></li>
+                        <li><a href="{{ route('view_product') }}" class="goto-elements">Departments</a></li>
                         {{-- <li><a href="#" class="goto-support">Support</a></li> --}}
                     </ul>
                 </div>
@@ -209,11 +209,9 @@
                 </div>
                 <div class="col-md-6 text-center text-md-right social-icons">
                     <label class="mr-3">Social Media</label>
-                    <a href="#" title="Facebook"><i class="icon-facebook-f"></i></a>
-                    <a href="#" title="Twitter"><i class="icon-twitter"></i></a>
-                    <a href="#" title="Instagram"><i class="icon-instagram"></i></a>
-                    <a href="#" title="Youtube"><i class="icon-youtube"></i></a>
-                    <a href="#" title="Pinterest"><i class="icon-pinterest"></i></a>
+                    <a href="https://www.facebook.com/abdo.hamdy.169656" title="Facebook"><i class="icon-facebook-f"></i></a>
+                    <a href="https://x.com/Abdelrahman9129?t=sfQyIA9nwodVmRFhJ1IiDg&s=08" title="Twitter"><i class="icon-twitter"></i></a>
+                    <a href="https://www.instagram.com/abed___hamdy/?utm_source=qr&igsh=bDFwaTZlaXlwOWth#" title="Instagram"><i class="icon-instagram"></i></a>
                 </div>
             </div>
         </footer>
@@ -228,7 +226,7 @@
                 <ul class="mobile-menu">
                     <li><a href="{{ route('view_packages') }}" class="goto-demos">Package</a></li>
                     <li><a href="{{ route('login') }}">Login</a></li>
-                    <li><a href="{{ route('view_department') }}">Departments</a></li>
+                    <li><a href="{{ route('view_product') }}">Products</a></li>
                     {{-- <li><a href="#">Support</a></li> --}}
                 </ul>
             </nav>

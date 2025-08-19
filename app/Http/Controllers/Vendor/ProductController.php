@@ -44,8 +44,9 @@ class ProductController extends Controller
             return redirect()->route('package')->with("error", "You don't have an active subscription.");
         }
 
-        $package = $subscription->package;
+        $package = $user->package;
         $productCount = Product::where("vendor_id", $user->id)->count();
+        // dd($package);
 
         if($productCount >= $package->max_products)
         {
@@ -80,14 +81,14 @@ class ProductController extends Controller
             return redirect()->route('package')->with("error", "You don't have an active subscription.");
         }
 
-        $package = $subscription->package;
+        $package = $user->package;
         $productCount = Product::where("vendor_id", $user->id)->count();
 
         if ($productCount >= $package->max_products)
         {
             return redirect()->route("package")->with("error", "You have reached the maximum number of products allowed in your current package.");
         }
-        
+
         DB::beginTransaction();
         try
         {

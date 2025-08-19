@@ -1,36 +1,18 @@
 <?php
 
-namespace App\Http\Controllers\Vendor;
+namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
-class DashboardVendorController extends Controller
+class AboutController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $vendor = Auth::guard("vendor")->user();
-        // dd($vendor);
-        $package = $vendor->package;
-
-        // $topProducts = $vendor->products()
-        // ->withCount('orders')
-        // ->orderByDesc('orders_count')
-        // ->take(5)
-        // ->get();
-
-        // // أحدث الطلبات
-        // $latestOrders = $vendor->orders()
-        //     ->with('customer')
-        //     ->latest()
-        //     ->take(5)
-        //     ->get();
-        
-        return view("Vendor.dashboard" , compact('vendor', 'package'));
+        return view("Client.views.about");
     }
 
     /**

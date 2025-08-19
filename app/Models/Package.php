@@ -13,6 +13,7 @@ class Package extends Model
         "name",
         "status",
         "price",
+        "max_products",
     ];
 
     public function features()

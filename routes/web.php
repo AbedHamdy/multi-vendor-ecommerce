@@ -3,12 +3,17 @@
 use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DepartmentController;
+use App\Http\Controllers\Admin\VendorController;
 use App\Http\Controllers\Admin\PackageController;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Client\DepartmentController as ClientDepartmentController;
+// use App\Http\Controllers\Cient\OrderController;
+use App\Http\Controllers\Client\OrderController;
+use App\Http\Controllers\Client\ViewProductController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\PackagesController;
-use App\Http\Controllers\Client\VendorController;
+use App\Http\Controllers\Client\CartController;
+use App\Http\Controllers\Client\AboutController;
+// use App\Http\Controllers\Client\VendorController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\StripeController;
 use App\Http\Controllers\StripeWebhookController;
@@ -75,6 +80,15 @@ Route::middleware(["admin"])->group(function(){
     Route::get("/dashboard/admin/attribute/edit/{id}", [AttributeController::class, "edit"])->name("attribute.edit");
     Route::put("/dashboard/admin/attribute/update/{id}", [AttributeController::class, "update"])->name("attribute.update");
     Route::delete("/dashboard/admin/attribute/delete/{department}/{attribute}", [AttributeController::class, "destroy"])->name("attribute.destroy");
+
+    // Vendor
+    Route::get("/dashboard/admin/vendor", [VendorController::class, "index"])->name("vendor");
+    Route::get("/dashboard/admin/vendor/create", [VendorController::class, "create"])->name("vendor.create");
+    Route::post("/dashboard/admin/vendor/store", [VendorController::class, "store"])->name("vendor.store");
+    Route::get("/dashboard/admin/vendor/show/{id}", [VendorController::class, "show"])->name("vendor.show");
+    Route::get("/dashboard/admin/vendor/edit/{id}", [VendorController::class, "edit"])->name("vendor.edit");
+    Route::put("/dashboard/admin/vendor/update/{id}", [VendorController::class, "update"])->name("vendor.update");
+    Route::delete("/dashboard/admin/vendor/delete/{id}", [VendorController::class, "destroy"])->name("vendor.delete");
 });
 
 // Vendor
@@ -110,7 +124,14 @@ Route::middleware(["vendor"])->group(function(){
 Route::get("/all-packages", [PackagesController::class, "index"])->name("view_packages");
 Route::get("/package/details/{id}", [PackagesController::class, "show"])->name("details_package");
 Route::get("/package/subscribe/{id}", [PackagesController::class, "subscribe"])->name("subscribe_package");
-Route::get("/all-departments", [ClientDepartmentController::class, "index"])->name("view_department");
+// Route::get("/all-departments", [ClientDepartmentController::class, "index"])->name("view_department");
+Route::get("/all-products", [ViewProductController::class, "index"])->name("view_product");
+Route::get("/product/show/{id}", [ViewProductController::class, "show"])->name("view_product.show");
+
+
+
+// Pages
+Route::get("/about", [AboutController::class, "index"])->name("about");
 
 
 
@@ -118,5 +139,15 @@ Route::middleware(['user'])->group(function () {
     Route::get('/subscribe-package/{id}/pay', [StripeController::class, 'checkout'])->name('package.checkout');
     Route::get('/payment/success/{package_id}', [PaymentController::class, 'success'])->name('payment.success');
     Route::get('/payment/cancel', [PaymentController::class, 'cancel'])->name('payment.cancel');
+
+    // Cart
+    Route::post("/add/product/to/cart", [CartController::class, "addToCart"])->name("add_cart");
+    Route::get("/cart", [CartController::class, "index"])->name("view_cart");
+
+    // Checkout
+    Route::get('/select/payment/method/checkout', [OrderController::class, 'index'])->name('select_payment');
+    Route::post('/checkout', [OrderController::class, 'processCheckout'])->name('client.checkout.process');
+    Route::get('/checkout/success', [OrderController::class, 'checkoutSuccess'])->name('client.checkout.success');
+
 });
 

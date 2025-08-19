@@ -43,15 +43,15 @@
         </div>
     </div>
 
-    {{-- باقي الكروت --}}
+    {{-- إحصائيات سريعة --}}
     <div class="row gy-4">
-        {{-- Total Packages --}}
-        <div class="col-md-4">
+        {{-- Total Products --}}
+        <div class="col-md-3">
             <div class="card h-100">
-                <div class="card-header">
-                    <div class="card-info">
-                        <h3>Total Packages</h3>
-                        <h2>.....</h2>
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <div>
+                        <h3>Total Products</h3>
+                        {{-- <h2>{{ $vendor->products()->count() }}</h2> --}}
                     </div>
                     <div class="card-icon blue">
                         <i class="fas fa-box-open fa-2x"></i>
@@ -60,32 +60,128 @@
             </div>
         </div>
 
-        {{-- Total Departments --}}
-        <div class="col-md-4">
+        {{-- Total Orders --}}
+        <div class="col-md-3">
             <div class="card h-100">
-                <div class="card-header">
-                    <div class="card-info">
-                        <h3>Total Departments</h3>
-                        <h2>.....</h2>
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <div>
+                        <h3>Total Orders</h3>
+                        {{-- <h2>{{ $vendor->orders()->count() }}</h2> --}}
                     </div>
                     <div class="card-icon orange">
-                        <i class="fas fa-building fa-2x"></i>
+                        <i class="fas fa-shopping-cart fa-2x"></i>
                     </div>
                 </div>
             </div>
         </div>
 
-        {{-- Total Vendors --}}
-        <div class="col-md-4">
+        {{-- Pending Orders --}}
+        <div class="col-md-3">
             <div class="card h-100">
-                <div class="card-header">
-                    <div class="card-info">
-                        <h3>Total Vendors</h3>
-                        <h2>.....</h2>
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <div>
+                        <h3>Pending Orders</h3>
+                        {{-- <h2>{{ $vendor->orders()->where('status', 'pending')->count() }}</h2> --}}
                     </div>
                     <div class="card-icon purple">
-                        <i class="fas fa-users fa-2x"></i>
+                        <i class="fas fa-clock fa-2x"></i>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- Total Departments --}}
+        <div class="col-md-3">
+            <div class="card h-100">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <div>
+                        <h3>Total Departments</h3>
+                        {{-- <h2>{{ $vendor->departments()->count() }}</h2> --}}
+                    </div>
+                    <div class="card-icon green">
+                        <i class="fas fa-building fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- المنتجات الأكثر مبيعًا --}}
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Top Selling Products</h3>
+                </div>
+                <div class="card-body">
+                    {{-- @if($topProducts->isNotEmpty())
+                        <table class="table table-bordered text-center">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Orders</th>
+                                    <th>Stock</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($topProducts as $product)
+                                    <tr>
+                                        <td>{{ $product->name }}</td>
+                                        <td>{{ $product->orders_count }}</td>
+                                        <td>{{ $product->stock }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @else
+                        <p class="text-muted">No sales yet.</p>
+                    @endif --}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- أحدث الطلبات --}}
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Latest Orders</h3>
+                </div>
+                <div class="card-body">
+                    {{-- @if($latestOrders->isNotEmpty())
+                        <table class="table table-striped text-center">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Customer</th>
+                                    <th>Status</th>
+                                    <th>Total</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($latestOrders as $order)
+                                    <tr>
+                                        <td>#{{ $order->id }}</td>
+                                        <td>{{ $order->customer->name }}</td>
+                                        <td>
+                                            <span class="badge
+                                                @if($order->status=='pending') bg-warning
+                                                @elseif($order->status=='completed') bg-success
+                                                @else bg-secondary @endif">
+                                                {{ ucfirst($order->status) }}
+                                            </span>
+                                        </td>
+                                        <td>{{ $order->total }} EGP</td>
+                                        <td>{{ $order->created_at->format('Y-m-d') }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @else
+                        <p class="text-muted">No orders yet.</p>
+                    @endif --}}
                 </div>
             </div>
         </div>
