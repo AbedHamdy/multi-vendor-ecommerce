@@ -19,6 +19,8 @@ use App\Http\Controllers\StripeController;
 use App\Http\Controllers\StripeWebhookController;
 use App\Http\Controllers\Vendor\CouponController;
 use App\Http\Controllers\Vendor\DashboardVendorController;
+use App\Http\Controllers\Vendor\NotificationController;
+use App\Http\Controllers\Vendor\OrderVendorController;
 use App\Http\Controllers\Vendor\ProductController;
 use App\Http\Controllers\Vendor\SubmitDepartmentController;
 use Illuminate\Support\Facades\Route;
@@ -118,6 +120,24 @@ Route::middleware(["vendor"])->group(function(){
     Route::get("/dashboard/vendor/coupon/edit/{id}", [CouponController::class, "edit"])->name("coupon.edit");
     Route::put("/dashboard/vendor/coupon/update/{id}", [CouponController::class, "update"])->name("coupon.update");
     Route::delete("/dashboard/vendor/coupon/delete/{id}", [CouponController::class, "destroy"])->name("coupon.delete");
+
+    // Notification
+    Route::get("/dashboard/vendor/unread-notifications", [NotificationController::class, "unRead"])->name("unread_notifications");
+    Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllRead'])->name('markAllRead_notifications');
+    // Route::get("/dashboard/vendor/all-notifications", [NotificationController::class, "index"])->name("all_notifications");
+
+    // Order
+    Route::get("/dashboard/vendor/all-orders", [OrderVendorController::class, "index"])->name("all_orders");
+    Route::get("/dashboard/vendor/orders/{order_id}/{product_id}", [OrderVendorController::class, "show"])
+        ->name("vendor.orders.show");
+    Route::post("/dashboard/vendor/orders/{order_id}/{product_id}/confirm", [OrderVendorController::class, "confirm"])
+        ->name("vendor.orders.confirm");
+    Route::post("/dashboard/vendor/orders/{order_id}/{product_id}/ship", [OrderVendorController::class, "ship"])
+        ->name("vendor.orders.ship");
+    Route::post("/dashboard/vendor/orders/{order_id}/{product_id}/deliver", [OrderVendorController::class, "deliver"])
+        ->name("vendor.orders.deliver");
+    Route::post("/dashboard/vendor/orders/{order_id}/{product_id}/cancel", [OrderVendorController::class, "cancel"])
+        ->name("vendor.orders.cancel");
 });
 
 // Client
@@ -149,5 +169,7 @@ Route::middleware(['user'])->group(function () {
     Route::post('/checkout', [OrderController::class, 'processCheckout'])->name('client.checkout.process');
     Route::get('/checkout/success', [OrderController::class, 'checkoutSuccess'])->name('client.checkout.success');
 
+    // Logout
+    Route::post('/logout', [LoginController::class, 'logoutUser'])->name('logout_user');
 });
 

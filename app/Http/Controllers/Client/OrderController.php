@@ -7,9 +7,13 @@ use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
+use App\Notifications\NewOrderNotification;
 use Illuminate\Http\Request;
+// use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
+
 
 class OrderController extends Controller
 {
@@ -34,10 +38,10 @@ class OrderController extends Controller
                 // dd($products);
                 $order = Order::create([
                     "user_id" => $user->id,
-                    "payment_method" => $data["payment_method"],
+                    "payment_method" => "cod",
                     "shipping_address" => $data["shipping_address"],
                     "phone" => $data["phone"],
-                    "price" => 0,
+                    "total_price" => 0,
                 ]);
 
                 if(!$order)
@@ -78,6 +82,10 @@ class OrderController extends Controller
                     $product->update([
                         "quantity" => $product->quantity - $cartItem->quantity,
                     ]);
+
+                    // dd($item->specifications);
+                    $vendor = $item->product->vendor;
+                    Notification::send($vendor, new NewOrderNotification($order, $item));
                 }
 
                 $deliveryFee = 10;
@@ -233,11 +241,15 @@ class OrderController extends Controller
                     "price" => $finalPrice,
                 ]);
 
+                $vendor = $cartItem->product->vendor;
+                Notification::send($vendor, new NewOrderNotification($order, $cartItem));
+
                 $product->update([
                     "quantity" => $product->quantity - $cartItem->quantity
                 ]);
 
                 $subtotal += $finalPrice;
+
             }
 
             $deliveryFee = 10;

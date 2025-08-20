@@ -127,4 +127,11 @@ class LoginController extends Controller
 
         return redirect()->route('login')->with('success', "Logout successfully");
     }
+
+    public function logoutUser()
+    {
+        Auth::guard('web')->logout();
+
+        return redirect()->route('login')->with('success', "Logout successfully");
+    }
 }
