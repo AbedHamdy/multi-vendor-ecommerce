@@ -1,3 +1,4 @@
+{{-- @dd($notifications->first()->data) --}}
 @extends('layouts.app')
 
 @section('title', 'Unread Notifications')
@@ -126,7 +127,7 @@
                                 </td>
                                 <td class="text-center">
                                     <div class="btn-group" role="group">
-                                        <a href="{{ route("vendor.orders.show" , [$notification->data['order_id'] , $notification->data['product_id']]) }}" class="btn btn-sm btn-outline-primary">
+                                        <a href="{{ route("vendor.orders.show" , [$notification->data["order_id"] , $notification->data["product_id"]]) }}" class="btn btn-sm btn-outline-primary">
                                             <i class="fas fa-eye me-1"></i>
                                             View
                                         </a>

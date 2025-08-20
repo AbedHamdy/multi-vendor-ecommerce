@@ -41,6 +41,7 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {{-- @dd($departments) --}}
                     @forelse($departments as $index => $department)
                         <tr>
                             <td>{{ $index + 1 }}</td>

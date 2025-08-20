@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminNotificationController;
+use App\Http\Controllers\Admin\AdminOrderController;
 use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DepartmentController;
@@ -56,7 +58,7 @@ Route::middleware(["admin"])->group(function(){
     Route::get("/dashboard/admin", [DashboardController::class, "index"])->name("dashboard");
 
     // Logout
-    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+    Route::post('/logout', [LoginController::class, 'logout'])->name('logout_admin');
 
     // Package
     Route::get("/dashboard/admin/package", [PackageController::class, "index"])->name("package");
@@ -91,6 +93,15 @@ Route::middleware(["admin"])->group(function(){
     Route::get("/dashboard/admin/vendor/edit/{id}", [VendorController::class, "edit"])->name("vendor.edit");
     Route::put("/dashboard/admin/vendor/update/{id}", [VendorController::class, "update"])->name("vendor.update");
     Route::delete("/dashboard/admin/vendor/delete/{id}", [VendorController::class, "destroy"])->name("vendor.delete");
+
+    // Notification
+    Route::get("/dashboard/admin/unread-notifications", [AdminNotificationController::class, "unRead"])->name("admin.unread_notifications");
+    Route::post('/dashboard/admin/notifications/mark-all-read', [AdminNotificationController::class, 'markAllRead'])->name('admin.markAllRead_notifications');
+
+    // Order
+    Route::get("/dashboard/admin/all-orders", [AdminOrderController::class, "index"])->name("admin.all_orders");
+    Route::get("/dashboard/admin/order/show/{id}", [AdminOrderController::class, "show"])->name("admin.order.show");
+    Route::put('/admin/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('admin.orders.updateStatus');
 });
 
 // Vendor
@@ -122,7 +133,7 @@ Route::middleware(["vendor"])->group(function(){
     Route::delete("/dashboard/vendor/coupon/delete/{id}", [CouponController::class, "destroy"])->name("coupon.delete");
 
     // Notification
-    Route::get("/dashboard/vendor/unread-notifications", [NotificationController::class, "unRead"])->name("unread_notifications");
+    Route::get("/dashboard/vendor/unread-notifications", [NotificationController::class, "unRead"])->name("vendor.unread_notifications");
     Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllRead'])->name('markAllRead_notifications');
     // Route::get("/dashboard/vendor/all-notifications", [NotificationController::class, "index"])->name("all_notifications");
 
@@ -170,6 +181,6 @@ Route::middleware(['user'])->group(function () {
     Route::get('/checkout/success', [OrderController::class, 'checkoutSuccess'])->name('client.checkout.success');
 
     // Logout
-    Route::post('/logout', [LoginController::class, 'logoutUser'])->name('logout_user');
+    Route::post('/logout/user', [LoginController::class, 'logoutUser'])->name('logout_user');
 });
 

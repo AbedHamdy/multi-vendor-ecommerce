@@ -224,18 +224,24 @@ class OrderVendorController extends Controller
             return redirect()->back()->with("error", "Unauthorized access to this product.");
         }
 
+        // dd("abed");
+
         $item->product->increment('stock', $item->quantity);
+        // dd($item->product);
         $otherItemsCount = $order->items()
             ->where('order_id', $order_id)
-            // ->where('id', '!=', $item->id)
+            ->where('id', '!=', $item->id)
             ->count();
 
+        // dd($otherItemsCount);
         if ($otherItemsCount > 0)
         {
+            // dd("abed");
             $item->delete();
         }
         else
         {
+            // dd("boda");
             $order->delete();
         }
 

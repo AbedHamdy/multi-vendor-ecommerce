@@ -49,10 +49,9 @@
                         @php
                             $statusClass = match ($order->status) {
                                 'pending' => 'bg-warning',
-                                'confirmed' => 'bg-info',
-                                'processing' => 'bg-primary',
+                                'paid' => 'bg-primary',
                                 'shipped' => 'bg-secondary',
-                                'delivered' => 'bg-success',
+                                'completed' => 'bg-success',
                                 'cancelled' => 'bg-danger',
                                 default => 'bg-dark',
                             };
@@ -65,7 +64,8 @@
 
                         {{-- Status Timeline --}}
                         <div class="timeline">
-                            <div class="timeline-item {{ $order->created_at ? 'completed' : '' }}">
+                            {{-- Order Placed يظهر دايمًا --}}
+                            <div class="timeline-item completed">
                                 <div class="timeline-marker"></div>
                                 <div class="timeline-content">
                                     <h6 class="mb-1">Order Placed</h6>
@@ -73,87 +73,62 @@
                                 </div>
                             </div>
 
-                            <div class="timeline-item {{ $order->confirmed_at ? 'completed' : '' }}">
-                                <div class="timeline-marker"></div>
-                                <div class="timeline-content">
-                                    <h6 class="mb-1">Order Confirmed</h6>
-                                    @if ($order->confirmed_at)
-                                        <small class="text-muted">{{ $order->confirmed_at->format('M d, Y - H:i') }}</small>
-                                    @else
-                                        <small class="text-muted">Pending confirmation</small>
-                                    @endif
+                            @if ($order->status == 'cancelled')
+                                {{-- فقط حالة Cancelled --}}
+                                <div class="timeline-item completed">
+                                    <div class="timeline-marker"></div>
+                                    <div class="timeline-content">
+                                        <h6 class="mb-1">Order Cancelled</h6>
+                                        <small class="text-muted">{{ $order->updated_at->format('M d, Y - H:i') }}</small>
+                                    </div>
                                 </div>
-                            </div>
-
-                            <div class="timeline-item {{ $order->shipped_at ? 'completed' : '' }}">
-                                <div class="timeline-marker"></div>
-                                <div class="timeline-content">
-                                    <h6 class="mb-1">Order Shipped</h6>
-                                    @if ($order->shipped_at)
-                                        <small class="text-muted">{{ $order->shipped_at->format('M d, Y - H:i') }}</small>
-                                    @else
-                                        <small class="text-muted">Not shipped yet</small>
-                                    @endif
+                            @else
+                                {{-- باقي الحالات الطبيعية --}}
+                                <div
+                                    class="timeline-item {{ $order->status == 'paid' || $order->status == 'shipped' || $order->status == 'completed' ? 'completed' : '' }}">
+                                    <div class="timeline-marker"></div>
+                                    <div class="timeline-content">
+                                        <h6 class="mb-1">Payment Completed</h6>
+                                        @if ($order->status == 'paid' || $order->status == 'shipped' || $order->status == 'completed')
+                                            <small
+                                                class="text-muted">{{ $order->updated_at->format('M d, Y - H:i') }}</small>
+                                        @else
+                                            <small class="text-muted">Pending payment</small>
+                                        @endif
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="timeline-item {{ $order->delivered_at ? 'completed' : '' }}">
-                                <div class="timeline-marker"></div>
-                                <div class="timeline-content">
-                                    <h6 class="mb-1">Order Delivered</h6>
-                                    @if ($order->delivered_at)
-                                        <small
-                                            class="text-muted">{{ $order->delivered_at->format('M d, Y - H:i') }}</small>
-                                    @else
-                                        <small class="text-muted">Not delivered yet</small>
-                                    @endif
+                                <div
+                                    class="timeline-item {{ $order->status == 'shipped' || $order->status == 'completed' ? 'completed' : '' }}">
+                                    <div class="timeline-marker"></div>
+                                    <div class="timeline-content">
+                                        <h6 class="mb-1">Order Shipped</h6>
+                                        @if ($order->status == 'shipped' || $order->status == 'completed')
+                                            <small
+                                                class="text-muted">{{ $order->shipped_at ? $order->shipped_at->format('M d, Y - H:i') : $order->updated_at->format('M d, Y - H:i') }}</small>
+                                        @else
+                                            <small class="text-muted">Not shipped yet</small>
+                                        @endif
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
 
-                        {{-- Action Buttons --}}
-                        <div class="mt-4">
-                            @if ($order->status === 'pending')
-                                <form action="{{ route('vendor.orders.confirm', $order->id) }}" method="POST"
-                                    class="mb-2">
-                                    @csrf
-                                    <button type="submit" class="btn btn-success w-100">
-                                        <i class="fas fa-check me-2"></i> Confirm Order
-                                    </button>
-                                </form>
-                            @endif
-
-                            @if (in_array($order->status, ['confirmed', 'processing']))
-                                <form action="{{ route('vendor.orders.ship', $order->id) }}" method="POST" class="mb-2">
-                                    @csrf
-                                    <button type="submit" class="btn btn-primary w-100">
-                                        <i class="fas fa-shipping-fast me-2"></i> Mark as Shipped
-                                    </button>
-                                </form>
-                            @endif
-
-                            @if ($order->status === 'shipped')
-                                <form action="{{ route('vendor.orders.deliver', $order->id) }}" method="POST"
-                                    class="mb-2">
-                                    @csrf
-                                    <button type="submit" class="btn btn-success w-100">
-                                        <i class="fas fa-truck me-2"></i> Mark as Delivered
-                                    </button>
-                                </form>
-                            @endif
-
-                            @if ($order->status === 'pending')
-                                <form action="{{ route('vendor.orders.cancel', $order->id) }}" method="POST"
-                                    onsubmit="return confirm('Are you sure you want to cancel this order?');">
-                                    @csrf
-                                    <button type="submit" class="btn btn-danger w-100">
-                                        <i class="fas fa-times me-2"></i> Cancel Order
-                                    </button>
-                                </form>
+                                <div class="timeline-item {{ $order->status == 'completed' ? 'completed' : '' }}">
+                                    <div class="timeline-marker"></div>
+                                    <div class="timeline-content">
+                                        <h6 class="mb-1">Order Completed</h6>
+                                        @if ($order->status == 'completed')
+                                            <small
+                                                class="text-muted">{{ $order->delivered_at ? $order->delivered_at->format('M d, Y - H:i') : $order->updated_at->format('M d, Y - H:i') }}</small>
+                                        @else
+                                            <small class="text-muted">Not completed yet</small>
+                                        @endif
+                                    </div>
+                                </div>
                             @endif
                         </div>
                     </div>
                 </div>
+
             </div>
 
             <div class="col-md-8">
@@ -222,29 +197,29 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    @if ($item->product->images)
-                                                        <img src="{{ asset('images/products/' . $item->product->images->first()->image) }}"
-                                                            alt="{{ $item->product->name }}" class="rounded me-3"
-                                                            style="width: 50px; height: 50px; object-fit: cover;">
-                                                    @else
-                                                        <div class="bg-light rounded me-3 d-flex align-items-center justify-content-center"
-                                                            style="width: 50px; height: 50px;">
-                                                            <i class="fas fa-image text-muted"></i>
-                                                        </div>
-                                                    @endif
-                                                    <div>
-                                                        <h6 class="mb-1">{{ $item->product->name }}</h6>
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                @if ($item->product->images)
+                                                    <img src="{{ asset('images/products/' . $item->product->images->first()->image) }}"
+                                                        alt="{{ $item->product->name }}" class="rounded me-3"
+                                                        style="width: 50px; height: 50px; object-fit: cover;">
+                                                @else
+                                                    <div class="bg-light rounded me-3 d-flex align-items-center justify-content-center"
+                                                        style="width: 50px; height: 50px;">
+                                                        <i class="fas fa-image text-muted"></i>
                                                     </div>
+                                                @endif
+                                                <div>
+                                                    <h6 class="mb-1">{{ $item->product->name }}</h6>
                                                 </div>
-                                            </td>
-                                            <td>
-                                                <span class="badge bg-primary fs-6">{{ $item->quantity }}</span>
-                                            </td>
-                                            <td class="fw-bold text-success">{{ number_format($item->price, 2) }} EGP</td>
-                                        </tr>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-primary fs-6">{{ $item->quantity }}</span>
+                                        </td>
+                                        <td class="fw-bold text-success">{{ number_format($item->price, 2) }} EGP</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>

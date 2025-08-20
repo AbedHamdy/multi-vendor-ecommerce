@@ -251,7 +251,7 @@
                                                     <i class="fas fa-eye me-2 text-info"></i> View Details
                                                 </a>
                                             </li>
-                                            @if ($order->status === 'pending')
+                                            {{-- @if ($order->status === 'pending')
                                                 <li>
                                                     <hr class="dropdown-divider">
                                                 </li>
@@ -298,7 +298,7 @@
                                                         </button>
                                                     </form>
                                                 </li>
-                                            @endif
+                                            @endif --}}
 
                                         </ul>
                                     </div>

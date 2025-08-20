@@ -2,7 +2,7 @@
 @section('title', 'Add Coupon')
 
 @section('content')
-<div class="container py-4">
+<div class="container">
     <h3 class="fw-bold mb-4 text-dark text-center">Add New Coupon</h3>
     <div class="card shadow border-0">
         <div class="card-body">

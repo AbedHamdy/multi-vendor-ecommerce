@@ -22,7 +22,12 @@
                 </a>
             </li>
             <li>
-                <form method="POST" action="{{ route('logout') }}" id="logout-form">
+                <a href="{{ route("admin.all_orders") }}" class="{{ request()->routeIs('all_orders*') ? 'active' : '' }}">
+                    <i class="fas fa-shopping-cart"></i> All Orders
+                </a>
+            </li>
+            <li>
+                <form method="POST" action="{{ route('logout_admin') }}" id="logout-form">
                     @csrf
                     <button type="submit" class="btn w-100 text-start {{ request()->routeIs('logout') ? 'active' : '' }}"
                         style="background-color: transparent; border: none; padding: 10px 15px; color: #000; display: flex; align-items: center;">

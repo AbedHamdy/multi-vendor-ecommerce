@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Edit Product')
 @section('content')
-    <div class="container py-4">
+    <div class="container">
         <h3 class="fw-bold mb-4 text-dark text-center">Edit Product</h3>
         <div class="card shadow border-0">
             <div class="card-body">

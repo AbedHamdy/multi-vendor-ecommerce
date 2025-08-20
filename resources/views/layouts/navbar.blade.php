@@ -13,11 +13,24 @@
         <div class="navbar-icons">
 
             @php
-                $user = auth("vendor")->user();
+                if(auth()->guard('vendor')->check())
+                {
+                    $user = auth()->guard('vendor')->user();
+                    $notificationsRoute = route('vendor.unread_notifications');
+                } elseif(auth()->guard('admin')->check())
+                {
+                    $user = auth()->guard('admin')->user();
+                    $notificationsRoute = route('admin.unread_notifications');
+                }
+                else
+                {
+                    $user = null;
+                    $notificationsRoute = '#';
+                }
                 $unreadCount = $user ? $user->unreadNotifications->count() : 0;
             @endphp
 
-            <a href="{{ route('unread_notifications') }}" class="position-relative btn btn-light">
+            <a href="{{ $notificationsRoute }}" class="position-relative btn btn-light">
                 <i class="fas fa-bell"></i>
                 @if($unreadCount > 0)
                     <span class="badge bg-danger position-absolute top-0 start-100 translate-middle">
@@ -25,7 +38,7 @@
                     </span>
                 @endif
             </a>
-            {{-- <button><i class="fas fa-bell"></i></button> --}}
+
             <button><i class="fas fa-user"></i></button>
             <button><i class="fas fa-cog"></i></button>
         </div>

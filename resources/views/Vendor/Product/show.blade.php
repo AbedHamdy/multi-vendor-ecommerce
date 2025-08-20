@@ -3,7 +3,7 @@
 @section('title', 'Product Details')
 
 @section('content')
-<div class="container py-4">
+<div class="container">
     <h3 class="fw-bold mb-4 text-center text-dark">Product Details</h3>
 
     {{-- ✅ الصورة الرئيسية --}}

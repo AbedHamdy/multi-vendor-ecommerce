@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\Admin;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
+use App\Notifications\AdminNewOrderNotification;
 use App\Notifications\NewOrderNotification;
 use Illuminate\Http\Request;
 // use Illuminate\Notifications\Notification;
@@ -95,8 +97,12 @@ class OrderController extends Controller
                 $finalTotal = $subtotal + $tax + $deliveryFee;
 
                 $order->update([
-                    "price" => $finalTotal,
+                    "total_price" => $finalTotal,
                 ]);
+
+                // dd($order);
+                $admins = Admin::all();
+                Notification::send($admins, new AdminNewOrderNotification($order));
 
                 Cart::where('user_id', $user->id)->delete();
                 DB::commit();
@@ -261,6 +267,9 @@ class OrderController extends Controller
                 "total_price" => $finalTotal,
                 "status" => 'paid',
             ]);
+
+            $admins = Admin::all();
+            Notification::send($admins, new AdminNewOrderNotification($order));
 
             // Clear cart
             Cart::where('user_id', $user->id)->delete();
