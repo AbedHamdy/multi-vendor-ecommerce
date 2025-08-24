@@ -1,16 +1,15 @@
-{{-- @dd($departments->get(4)) --}}
 @extends("layouts.app")
 
-@section("title", "Departments")
+@section("title", "Coupons")
 
 @section("content")
-<div class="container py-4">
+<div class="container">
 
     {{-- Header --}}
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h3 class="fw-bold m-0 text-dark">Departments List</h3>
-        <a href="{{ route('department.create') }}" class="btn btn-primary">
-            <i class="fas fa-plus me-1"></i> Add Department
+        <h3 class="fw-bold m-0 text-dark">Coupons List</h3>
+        <a href="{{ route('coupon.create') }}" class="btn btn-primary">
+            <i class="fas fa-plus me-1"></i> Add Coupon
         </a>
     </div>
 
@@ -36,18 +35,32 @@
                 <thead class="table-light">
                     <tr>
                         <th>#</th>
-                        <th>Department Name</th>
-                        <th>Vendors Count</th>
+                        <th>Code</th>
+                        <th>Type</th>
+                        <th>Discount</th>
+                        <th>Usage</th>
+                        <th>Status</th>
                         <th class="text-center">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {{-- @dd($departments) --}}
-                    @forelse($departments as $index => $department)
+                    @forelse($coupons as $index => $coupon)
                         <tr>
                             <td>{{ $index + 1 }}</td>
-                            <td class="fw-semibold">{{ $department->name }}</td>
-                            <td>{{ $department->vendors_count }}</td>
+                            <td class="fw-semibold">{{ $coupon->code }}</td>
+                            <td>{{ ucfirst($coupon->type) }}</td>
+                            <td>
+                                {{ $coupon->value }}
+                                @if($coupon->discount_type === 'percent') % @else $ @endif
+                            </td>
+                            <td>{{ $coupon->used_times }} / {{ $coupon->usage_limit ?? '∞' }}</td>
+                            <td>
+                                @if($coupon->is_active)
+                                    <span class="badge bg-success">Active</span>
+                                @else
+                                    <span class="badge bg-secondary">Inactive</span>
+                                @endif
+                            </td>
                             <td class="text-center">
                                 <div class="dropdown">
                                     <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
@@ -55,18 +68,13 @@
                                     </button>
                                     <ul class="dropdown-menu">
                                         <li>
-                                            <a class="dropdown-item" href="{{ route('department.show', $department->id) }}">
-                                                <i class="fas fa-eye me-2 text-info"></i> View
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" href="{{ route('department.edit', $department->id) }}">
+                                            <a class="dropdown-item" href="{{ route('coupon.edit', $coupon->id) }}">
                                                 <i class="fas fa-edit me-2 text-warning"></i> Edit
                                             </a>
                                         </li>
                                         <li><hr class="dropdown-divider"></li>
                                         <li>
-                                            <form action="{{ route('department.destroy', $department->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this department?');">
+                                            <form action="{{ route('coupon.delete', $coupon->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this coupon?');">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="dropdown-item text-danger">
@@ -80,13 +88,14 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4" class="text-center text-muted">No departments available.</td>
+                            <td colspan="7" class="text-center text-muted">No coupons available.</td>
                         </tr>
                     @endforelse
                 </tbody>
             </table>
+
             <div class="d-flex justify-content-center mt-4">
-                {{-- {{ $departments->links() }} --}}
+                {{ $coupons->links() }}
             </div>
         </div>
     </div>

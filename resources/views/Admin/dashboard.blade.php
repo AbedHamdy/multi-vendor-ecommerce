@@ -55,5 +55,33 @@
                 </div>
             </div>
         </div>
+
+        {{-- Total Delivered Orders --}}
+        <div class="card">
+            <div class="card-header">
+                <div class="card-info">
+                    <h3>Delivered Orders</h3>
+                    <h2>{{ $deliveredOrdersCount }}</h2>
+                </div>
+                <div class="card-icon blue">
+                    <i class="fas fa-truck"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow-sm rounded-lg border-0">
+            <div class="card-header d-flex justify-content-between align-items-center bg-light p-3 rounded-top">
+                <div class="card-info">
+                    <h5 class="mb-1 text-muted">Sales Revenue</h5>
+                    <h2 class="mb-0 text-primary fw-bold">{{ $totalCompletedOrdersPrice }} EGP</h2>
+                </div>
+                <div class="card-icon bg-primary text-white d-flex align-items-center justify-content-center rounded-circle" style="width:50px; height:50px;">
+                    <i class="fas fa-sack-dollar fa-"></i>
+                </div>
+            </div>
+        </div>
+
+
     </div>
 @endsection
+lg

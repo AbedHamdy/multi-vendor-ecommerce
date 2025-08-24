@@ -10,18 +10,25 @@ class Coupon extends Model
     use HasFactory;
 
     protected $fillable = [
-        'vendor_id',
-        'code',
-        'usage_limit',
-        'used_times',
-        'start_date',
-        'end_date',
-        'is_active',
-        'value',
+        "code",
+        "type",
+        "discount_type",
+        "value",
+        "usage_limit",
+        "used_times",
+        "min_order_amount",
+        "start_date",
+        "end_date",
+        "is_active",
     ];
 
     public function vendor()
     {
         return $this->belongsTo(Vendor::class);
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
     }
 }

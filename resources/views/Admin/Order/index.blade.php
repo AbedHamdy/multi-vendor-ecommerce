@@ -3,7 +3,7 @@
 @section('title', 'Orders')
 
 @section('content')
-    <div class="container py-4">
+    <div class="container">
 
         {{-- Header --}}
         <div class="d-flex justify-content-between align-items-center mb-4">
@@ -14,6 +14,32 @@
                     <span class="badge bg-dark ms-2">{{ $orders->total() }}</span>
                 @endif
             </h3>
+
+            <div class="mb-3">
+                <form method="GET" action="{{ route('admin.all_orders') }}" class="d-flex align-items-center gap-2">
+                    <div class="input-group">
+                        <label class="input-group-text bg-dark text-white" for="status"><i
+                                class="fas fa-filter"></i></label>
+                        <select name="status" id="status" class="form-select" onchange="this.form.submit()">
+                            <option value="">-- Filter by Status --</option>
+                            <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
+                            <option value="paid" {{ request('status') == 'paid' ? 'selected' : '' }}>Paid</option>
+                            <option value="shipped" {{ request('status') == 'shipped' ? 'selected' : '' }}>Shipped</option>
+                            <option value="completed" {{ request('status') == 'completed' ? 'selected' : '' }}>Completed
+                            </option>
+                            <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>Cancelled
+                            </option>
+                        </select>
+                    </div>
+
+                    @if (request('status'))
+                        <a href="{{ route('admin.all_orders') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-undo"></i> Reset
+                        </a>
+                    @endif
+                </form>
+            </div>
+
         </div>
 
         {{-- Table --}}

@@ -11,11 +11,18 @@ class AdminOrderController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $orders = Order::latest()->paginate();
-        // dd($orders);
-        return view("Admin.Order.index" , compact("orders"));
+        $status = $request->get('status');
+
+        $orders = Order::latest()
+            ->when($status, function ($query, $status) {
+                $query->where('status', $status);
+            })
+            ->paginate(10)
+            ->appends(['status' => $status]);
+
+        return view("Admin.Order.index", compact("orders", "status"));
     }
 
     /**

@@ -88,7 +88,7 @@
                                     </small>
                                 </td>
                                 <td class="text-center">
-                                    <a href="{{ {{ route('admin.order.show', $notification->data['order_id']) }} }}"
+                                    <a href="{{ route('admin.order.show', $notification->data['order_id']) }}"
                                         class="btn btn-sm btn-outline-primary">
                                         <i class="fas fa-eye me-1"></i> View
                                     </a>

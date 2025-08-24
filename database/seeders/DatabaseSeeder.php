@@ -17,6 +17,13 @@ class DatabaseSeeder extends Seeder
             AdminSeeder::class,
             PackageSeeder::class,
             DepartmentSeeder::class,
+            // DepartmentsSeeder::class,
+            AttributesSeeder::class,
+            AttributeValuesSeeder::class,
+            VendorsSeeder::class,
+            ProductsSeeder::class,
+            ProductAttributeValuesSeeder::class,
+            ProductImagesSeeder::class,
         ]);
         // \App\Models\User::factory(10)->create();
 

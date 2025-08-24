@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Requests\Coupon;
+use Illuminate\Validation\Rule;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -21,15 +22,17 @@ class UpdateCouponRequest extends FormRequest
      */
     public function rules(): array
     {
-        $couponId = $this->route('id');
-
         return [
-            'code' => 'required|string|unique:coupons,code,' . $couponId,
-            'value' => 'required|numeric|min:0|max:100',
+            'code' => ['required','string','max:50',Rule::unique('coupons', 'code')->ignore($this->id),
+            ],
+            'type' => 'required|in:general,welcome,loyalty,event',
+            'discount_type' => 'required|in:fixed,percent',
+            'value' => 'required|numeric|min:0.01',
             'usage_limit' => 'nullable|integer|min:1',
-            'is_active' => 'required|boolean',
-            'start_date' => 'required|date|after_or_equal:now',
-            'end_date' => 'required|date|after:start_date',
+            'min_order_amount' => 'nullable|numeric|min:0',
+            'start_date' => 'nullable|date|after_or_equal:now',
+            'end_date' => 'nullable|date|after:start_date',
+            'is_active' => 'nullable|boolean',
         ];
     }
 }

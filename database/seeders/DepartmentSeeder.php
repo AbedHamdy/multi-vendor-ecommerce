@@ -9,21 +9,13 @@ class DepartmentSeeder extends Seeder
 {
     public function run(): void
     {
-        $departments = [
-            'Electronics',
-            'Fashion',
-            'Home & Kitchen',
-            'Books',
-            'Health & Beauty',
-            'Sports & Outdoors',
-            'Toys & Games',
-            'Automotive',
-            'Groceries',
-            'Office Supplies',
-        ];
+        $departments = ['Electronics', 'Fashion', 'Home & Kitchen', 'Books', 'Toys', 'Sports'];
 
-        foreach ($departments as $name) {
-            Department::create(['name' => $name]);
+        foreach ($departments as $dept)
+        {
+            Department::create([
+                'name' => $dept
+            ]);
         }
     }
 }

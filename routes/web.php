@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminNotificationController;
 use App\Http\Controllers\Admin\AdminOrderController;
 use App\Http\Controllers\Admin\AttributeController;
+use App\Http\Controllers\Admin\CouponsController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DepartmentController;
 use App\Http\Controllers\Admin\VendorController;
@@ -102,6 +103,14 @@ Route::middleware(["admin"])->group(function(){
     Route::get("/dashboard/admin/all-orders", [AdminOrderController::class, "index"])->name("admin.all_orders");
     Route::get("/dashboard/admin/order/show/{id}", [AdminOrderController::class, "show"])->name("admin.order.show");
     Route::put('/admin/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('admin.orders.updateStatus');
+
+    // Coupon
+    Route::get("/dashboard/admin/all-coupons" , [CouponsController::class, "index"])->name("coupon.index");
+    Route::get("/dashboard/admin/create" , [CouponsController::class, "create"])->name("coupon.create");
+    Route::post("/dashboard/admin/store" , [CouponsController::class, "store"])->name("coupon.store");
+    Route::get("/dashboard/admin/edit/{id}" , [CouponsController::class, "edit"])->name("coupon.edit");
+    Route::put("/dashboard/admin/update/{id}" , [CouponsController::class, "update"])->name("coupon.update");
+    Route::delete("/dashboard/admin/delete/{id}" , [CouponsController::class, "destroy"])->name("coupon.delete");
 });
 
 // Vendor
@@ -123,14 +132,14 @@ Route::middleware(["vendor"])->group(function(){
     Route::delete("/dashboard/vendor/product/delete/{id}",[ProductController::class, "destroy"])->name("product.delete");
 
     // Coupon
-    Route::get("/dashboard/vendor/all-coupons", [CouponController::class, "index"])->name("coupon");
-    Route::get("/dashboard/vendor/coupon/create", [CouponController::class, "create"])->name("coupon.create");
-    Route::get('/dashboard/vendor/products/search', [ProductController::class, 'search'])->name('vendor.products.search');
-    Route::post("/dashboard/vendor/coupon/store", [CouponController::class, "store"])->name("coupon.store");
-    Route::get("/dashboard/vendor/coupon/show/{id}", [CouponController::class, "show"])->name("coupon.show");
-    Route::get("/dashboard/vendor/coupon/edit/{id}", [CouponController::class, "edit"])->name("coupon.edit");
-    Route::put("/dashboard/vendor/coupon/update/{id}", [CouponController::class, "update"])->name("coupon.update");
-    Route::delete("/dashboard/vendor/coupon/delete/{id}", [CouponController::class, "destroy"])->name("coupon.delete");
+    // Route::get("/dashboard/vendor/all-coupons", [CouponController::class, "index"])->name("coupon");
+    // Route::get("/dashboard/vendor/coupon/create", [CouponController::class, "create"])->name("coupon.create");
+    // Route::get('/dashboard/vendor/products/search', [ProductController::class, 'search'])->name('vendor.products.search');
+    // Route::post("/dashboard/vendor/coupon/store", [CouponController::class, "store"])->name("coupon.store");
+    // Route::get("/dashboard/vendor/coupon/show/{id}", [CouponController::class, "show"])->name("coupon.show");
+    // Route::get("/dashboard/vendor/coupon/edit/{id}", [CouponController::class, "edit"])->name("coupon.edit");
+    // Route::put("/dashboard/vendor/coupon/update/{id}", [CouponController::class, "update"])->name("coupon.update");
+    // Route::delete("/dashboard/vendor/coupon/delete/{id}", [CouponController::class, "destroy"])->name("coupon.delete");
 
     // Notification
     Route::get("/dashboard/vendor/unread-notifications", [NotificationController::class, "unRead"])->name("vendor.unread_notifications");
@@ -174,6 +183,7 @@ Route::middleware(['user'])->group(function () {
     // Cart
     Route::post("/add/product/to/cart", [CartController::class, "addToCart"])->name("add_cart");
     Route::get("/cart", [CartController::class, "index"])->name("view_cart");
+    Route::delete('/cart/remove/{id}', [CartController::class, 'destroy'])->name('cart.remove');
 
     // Checkout
     Route::get('/select/payment/method/checkout', [OrderController::class, 'index'])->name('select_payment');

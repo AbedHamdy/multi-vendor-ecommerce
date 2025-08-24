@@ -121,7 +121,7 @@ class CartController extends Controller
     {
         $user = Auth::guard("web")->user();
         // dd($user);
-        $orders = Cart::with('product.images')
+        $orders = Cart::with(['product.images'])
             ->where("user_id" , $user->id)
             ->paginate();
 
@@ -205,8 +205,22 @@ class CartController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        // dd("abed");
+        $user = Auth::guard("web")->user();
+        $product = Cart::find($id);
+        if(!$product)
+        {
+            return redirect()->back()->with("error" , "Product not found , please try again.");
+        }
+
+        if($product->user_id !== $user->id)
+        {
+            return redirect()->back()->with("error" , "You are not authorized to perform this action.");
+        }
+
+        $product->delete();
+        return redirect()->back()->with("success", "Product removed from cart successfully.");
     }
 }

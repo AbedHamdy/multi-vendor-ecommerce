@@ -35,9 +35,17 @@
                 </div>
                 <div class="header-main">
                     <ul class="menu">
-                        <li><a href="{{ route('view_packages') }}" class="goto-demos">Package</a></li>
-                        <li><a href="{{ route('login') }}" class="goto-features">Login</a></li>
-                        <li><a href="{{ route('view_product') }}" class="goto-elements">Departments</a></li>
+                        <li>
+                            <a href="{{ route('view_packages') }}" class="goto-demos">Package</a>
+                        </li>
+                        @guest
+                            <li>
+                                <a href="{{ route('login') }}" class="goto-features">Login</a>
+                            </li>
+                        @endguest
+                        <li>
+                            <a href="{{ route('view_product') }}" class="goto-elements">Departments</a>
+                        </li>
                         {{-- <li><a href="#" class="goto-support">Support</a></li> --}}
                     </ul>
                 </div>
@@ -57,8 +65,12 @@
                 <div class="banner-text text-center">
                     <h1>Bazario - Multi Vendor E-Commerce</h1>
                     <h5 class="mb-5">Everything you need , all in one spot</h5>
-                    <p class="mb-0"><a href="#" class="btn btn-primary btn-outline goto-demos">Start shopping
-                            now and explore our top products!<i class="icon-long-arrow-alt-down"></i></a></p>
+                    <p class="mb-0">
+                        <a href="{{ route('view_product') }}" class="btn btn-primary btn-outline goto-demos">
+                            Start shopping now!
+                            <i class="icon-long-arrow-alt-down"></i>
+                        </a>
+                    </p>
                 </div>
             </section>
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Department;
+use App\Models\Order;
 use App\Models\Package;
 use App\Models\User;
 use App\Models\Vendor;
@@ -20,8 +21,10 @@ class DashboardController extends Controller
         $departmentCount = Department::count();
         $vendorCount = Vendor::count();
         $userCount = User::count();
+        $deliveredOrdersCount = Order::where('status', 'completed')->count();
+        $totalCompletedOrdersPrice = Order::where('status', 'completed')->sum('total_price');
 
-        return view('Admin.dashboard' , compact("packageCount" , "departmentCount" , "vendorCount" , "userCount"));
+        return view('Admin.dashboard' , compact("packageCount" , "departmentCount" , "vendorCount" , "userCount" , "deliveredOrdersCount" , "totalCompletedOrdersPrice"));
     }
 
     /**

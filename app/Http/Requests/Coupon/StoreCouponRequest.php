@@ -22,12 +22,14 @@ class StoreCouponRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'code' => 'required|string|unique:coupons,code',
-            'value' => 'required|numeric|min:0|max:100',
-            'usage_limit' => 'required|integer|min:1',
-            'is_active' => 'required|boolean',
-            'start_date' => 'required|date|after_or_equal:now',
-            'end_date' => 'required|date|after:start_date',
+            'code' => 'required|string|max:50|unique:coupons,code',
+            'type' => 'required|in:general,welcome,loyalty,event',
+            'discount_type' => 'required|in:fixed,percent',
+            'value' => 'required|numeric|min:0.01',
+            'usage_limit' => 'nullable|integer|min:1',
+            'min_order_amount' => 'nullable|numeric|min:0',
+            'start_date' => 'nullable|date|after_or_equal:now',
+            'end_date' => 'nullable|date|after:start_date',
         ];
     }
 }
