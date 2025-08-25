@@ -76,13 +76,22 @@
                     <div class="col-6 col-md-4 col-lg-3 mb-4">
                         <div class="product card h-100 {{ $product->stock <= 0 ? 'out-of-stock' : '' }}">
                             <div class="product-media">
+                                {{-- @dd($product->images) --}}
                                 @if ($product->images->isNotEmpty())
                                     <a href="{{ route('product.show', $product->id) }}">
-                                        <img src="{{ $product->images ? asset('images/products/' . $product->images->first()->image) : asset('images/products/elements/product-2.jpg') }}"
-                                            alt="{{ $product->name }}" class="product-image card-img-top">
+                                        {{-- لو الصورة اللي في الداتا بيز عبارة عن لينك خارجي --}}
+                                        @php
+                                            $img = $product->images->first()->image;
+                                            $imgSrc = Str::startsWith($img, ['http://', 'https://'])
+                                                ? $img
+                                                : asset('images/products/' . $img);
+                                        @endphp
+                                        <img src="{{ $imgSrc }}" alt="{{ $product->name }}"
+                                            class="product-image card-img-top">
                                     </a>
                                 @else
                                     <a href="{{ route('product.show', $product->id) }}">
+                                        {{-- fallback للصورة الافتراضية --}}
                                         <img src="{{ asset('images/products/elements/product-2.jpg') }}" alt="No Image"
                                             class="product-image card-img-top">
                                     </a>

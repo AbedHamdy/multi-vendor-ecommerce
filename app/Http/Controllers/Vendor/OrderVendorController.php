@@ -35,7 +35,7 @@ class OrderVendorController extends Controller
 
         // Order by latest first
         $orders = $query->latest()->paginate(15);
-
+        // dd($orders->first());
         return view("Vendor.Order.index", compact("orders"));
     }
 

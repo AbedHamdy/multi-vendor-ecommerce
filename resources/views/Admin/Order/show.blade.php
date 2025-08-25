@@ -117,7 +117,7 @@
                                 <p class="mb-1"><small>Tax (10%): {{ number_format($order->total_price * 0.10, 2) }} EGP</small></p>
                                 <hr>
                                 <h5 class="fw-bold mt-2">
-                                    Total: {{ number_format($order->total_price + 10 + $order->total_price * 0.1, 2) }} EGP
+                                    Total: {{ number_format($order->total_price, 2) }} EGP
                                 </h5>
                             </div>
                         </div>

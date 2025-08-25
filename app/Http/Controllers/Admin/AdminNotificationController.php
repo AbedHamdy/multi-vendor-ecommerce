@@ -17,6 +17,7 @@ class AdminNotificationController extends Controller
             ->latest()
             ->paginate();
 
+        // dd($notifications);
         return view('Admin.Notification.unRead', compact('notifications'));
     }
 

@@ -224,16 +224,26 @@
                             <div class="card-body p-4">
                                 <div class="row align-items-center">
                                     <div class="col-md-3 col-sm-4 text-center">
-                                        @if ($cart->product->images->isNotEmpty())
-                                            <img src="{{ asset('images/products/' . $cart->product->images->first()->image) }}"
-                                                alt="{{ $cart->product->name }}" class="img-fluid product-image"
+                                        @php
+                                            $product = $cart->product;
+                                        @endphp
+
+                                        @if ($product->images->isNotEmpty())
+                                            @php
+                                                $img = $product->images->first()->image;
+                                                $imgSrc = Str::startsWith($img, ['http://', 'https://'])
+                                                    ? $img
+                                                    : asset('images/products/' . $img);
+                                            @endphp
+                                            <img src="{{ $imgSrc }}" alt="{{ $product->name }}"
+                                                class="img-fluid product-image"
                                                 style="max-height: 120px; object-fit: cover;">
                                         @else
-                                            <div class="bg-light d-flex align-items-center justify-content-center product-image"
-                                                style="height: 120px; width: 100%;">
-                                                <i class="fas fa-image text-muted fa-3x"></i>
-                                            </div>
+                                            <img src="{{ asset('images/products/elements/product-2.jpg') }}" alt="No Image"
+                                                class="img-fluid product-image"
+                                                style="max-height: 120px; object-fit: cover;">
                                         @endif
+
                                     </div>
 
                                     <div class="col-md-6 col-sm-8">

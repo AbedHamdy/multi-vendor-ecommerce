@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             ProductsSeeder::class,
             ProductAttributeValuesSeeder::class,
             ProductImagesSeeder::class,
+            CouponSeeder::class,
         ]);
         // \App\Models\User::factory(10)->create();
 

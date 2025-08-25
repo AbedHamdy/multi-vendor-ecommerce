@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use App\Models\Cart;
+use App\Models\Coupon;
+use App\Models\CouponUser;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
@@ -28,9 +30,34 @@ class OrderController extends Controller
             'phone' => 'required|string|max:20',
             'payment_method' => 'required|in:stripe,cash',
             'price' => 'required|numeric|min:0',
+            'coupon_code' => 'nullable|string|exists:coupons,code',
         ]);
 
+        if (!empty($data['coupon_code']))
+        {
+            $coupon = Coupon::where('code', $data['coupon_code'])->first();
+            if(!$coupon)
+            {
+                return redirect()->back()->with('error' , 'Coupon not found , please try again.')->withInput();
+            }
+
+            $usedBefore = CouponUser::where('user_id', $user->id)
+                ->where('coupon_id', $coupon->id)
+                ->first();
+
+            if ($usedBefore)
+            {
+                return redirect()->back()->with('error' , 'You have already used this coupon before.')->withInput();
+            }
+
+            if($coupon->used_times >= $coupon->usage_limit)
+            {
+                return redirect()->back()->with('error' , 'This coupon has reached its usage limit.')->withInput();
+            }
+        }
+
         // dd($data);
+
         if($data["payment_method"] == "cash")
         {
             DB::beginTransaction();
@@ -38,6 +65,8 @@ class OrderController extends Controller
             {
                 $products = Cart::where("user_id" , $user->id)->get();
                 // dd($products);
+                // dd($data);
+
                 $order = Order::create([
                     "user_id" => $user->id,
                     "payment_method" => "cod",
@@ -69,6 +98,18 @@ class OrderController extends Controller
                     $finalPrice = $priceBeforeDiscount * (1 - $discount / 100);
                     $totalPrice += $finalPrice;
 
+                    if (!empty($data['coupon_code']))
+                    {
+                        if($coupon->discount_type == "fixed")
+                        {
+                            $totalPrice -= $coupon->value;
+                        }
+                        else if($coupon->discount_type == "percent")
+                        {
+                            $totalPrice -= ($totalPrice * ($coupon->value / 100));
+                        }
+                    }
+
                     $item = OrderItem::create([
                         "order_id" => $order->id,
                         "product_id" => $product->id,
@@ -93,9 +134,34 @@ class OrderController extends Controller
                 $deliveryFee = 10;
                 $taxPercent = 10;
                 $subtotal = $totalPrice;
+                // dd($totalPrice);
+
+                if (!empty($data['coupon_code']))
+                {
+                    // dd($data);
+                    if($coupon->discount_type == "fixed")
+                    {
+                        $subtotal -= $coupon->value;
+                    }
+                    else if($coupon->discount_type == "percent")
+                    {
+                        $subtotal -= ($subtotal * ($coupon->value / 100));
+                    }
+
+                    // Mark coupon as used by the user
+                    CouponUser::create([
+                        'user_id' => $user->id,
+                        'coupon_id' => $coupon->id,
+                    ]);
+
+                    $coupon->update([
+                        "used_times" => $coupon->used_times + 1,
+                    ]);
+                }
+
                 $tax = $subtotal * ($taxPercent / 100);
                 $finalTotal = $subtotal + $tax + $deliveryFee;
-
+                // dd($finalTotal);
                 $order->update([
                     "total_price" => $finalTotal,
                 ]);
@@ -144,25 +210,44 @@ class OrderController extends Controller
 
                 $deliveryFee = 10;
                 $taxPercent = 10;
+                if (!empty($data['coupon_code']))
+                {
+                    // dd($data);
+                    if($coupon->discount_type == "fixed")
+                    {
+                        $subtotal -= $coupon->value;
+                    }
+                    else if($coupon->discount_type == "percent")
+                    {
+                        $subtotal -= ($subtotal * ($coupon->value / 100));
+                    }
+
+                    // Mark coupon as used by the user
+                    // CouponUser::create([
+                    //     'user_id' => $user->id,
+                    //     'coupon_id' => $coupon->id,
+                    // ]);
+
+                    // $coupon->update([
+                    //     "used_times" => $coupon->used_times + 1,
+                    // ]);
+                }
+
                 $tax = $subtotal * ($taxPercent / 100);
                 $finalTotal = $subtotal + $tax + $deliveryFee;
+                // dd($finalTotal);
 
-                $lineItems[] = [
-                    'price_data' => [
-                        'currency' => 'usd',
-                        'product_data' => ['name' => 'Delivery Fee'],
-                        'unit_amount' => intval($deliveryFee * 100),
+                $lineItems = [
+                    [
+                        'price_data' => [
+                            'currency' => 'usd',
+                            'product_data' => [
+                                'name' => 'Order Payment',
+                            ],
+                            'unit_amount' => intval($finalTotal * 100), // السعر النهائي بعد الخصم
+                        ],
+                        'quantity' => 1,
                     ],
-                    'quantity' => 1,
-                ];
-
-                $lineItems[] = [
-                    'price_data' => [
-                        'currency' => 'usd',
-                        'product_data' => ['name' => 'Tax (10%)'],
-                        'unit_amount' => intval($tax * 100),
-                    ],
-                    'quantity' => 1,
                 ];
 
                 $session = \Stripe\Checkout\Session::create([
@@ -176,6 +261,7 @@ class OrderController extends Controller
                         'shipping_address' => $data['shipping_address'],
                         'phone' => $data['phone'],
                         'total_price' => $finalTotal,
+                        'coupon_id' => $coupon->id ?? null,
                     ],
                 ]);
 
@@ -209,6 +295,12 @@ class OrderController extends Controller
         $cartItems = Cart::where('user_id', $user->id)->get();
         if($cartItems->isEmpty()) return redirect()->route('select_payment');
 
+        $couponId = $metadata->coupon_id ?? null;
+        if ($couponId)
+        {
+            $coupon = Coupon::find($couponId);
+        }
+
         DB::beginTransaction();
         try
         {
@@ -240,6 +332,18 @@ class OrderController extends Controller
                 $discount = $product->discount ?? 0;
                 $finalPrice = $priceBeforeDiscount * (1 - $discount / 100);
 
+                // if (!empty($data['coupon_code']))
+                //     {
+                //     if($coupon->discount_type == "fixed")
+                //     {
+                //         $finalPrice -= $coupon->value;
+                //     }
+                //     else if($coupon->discount_type == "percent")
+                //     {
+                //         $finalPrice -= ($finalPrice * ($coupon->value / 100));
+                //     }
+                // }
+
                 OrderItem::create([
                     "order_id" => $order->id,
                     "product_id" => $product->id,
@@ -255,11 +359,31 @@ class OrderController extends Controller
                 ]);
 
                 $subtotal += $finalPrice;
-
             }
 
             $deliveryFee = 10;
             $taxPercent = 10;
+
+            if($coupon->discount_type == "fixed")
+            {
+                $subtotal -= $coupon->value;
+            }
+            else if($coupon->discount_type == "percent")
+            {
+                $subtotal -= ($subtotal * ($coupon->value / 100));
+            }
+
+            // Mark coupon as used by the user
+            CouponUser::create([
+                'user_id' => $user->id,
+                'coupon_id' => $coupon->id,
+            ]);
+
+            $coupon->update([
+                "used_times" => $coupon->used_times + 1,
+            ]);
+
+
             $tax = $subtotal * ($taxPercent / 100);
             $finalTotal = $subtotal + $tax + $deliveryFee;
 

@@ -63,9 +63,12 @@
                                         $mainImage =
                                             $product->images->where('is_main', true)->first() ??
                                             $product->images->first();
+                                        // لو الصورة لينك خارجي استخدمه مباشرة، لو اسم ملف استخدم asset
+                                        $mainImgSrc = Str::startsWith($mainImage->image, ['http://', 'https://'])
+                                            ? $mainImage->image
+                                            : asset('images/products/' . $mainImage->image);
                                     @endphp
-                                    <img id="product-zoom" src="{{ asset('images/products/' . $mainImage->image) }}"
-                                        data-zoom-image="{{ asset('images/products/' . $mainImage->image) }}"
+                                    <img id="product-zoom" src="{{ $mainImgSrc }}" data-zoom-image="{{ $mainImgSrc }}"
                                         alt="{{ $product->name }}" class="img-fluid">
 
                                     @if ($product->discount)
@@ -76,11 +79,16 @@
                                 @if ($product->images->count() > 1)
                                     <div id="product-zoom-gallery" class="product-image-gallery">
                                         @foreach ($product->images as $image)
+                                            @php
+                                                $imgSrc = Str::startsWith($image->image, ['http://', 'https://'])
+                                                    ? $image->image
+                                                    : asset('images/products/' . $image->image);
+                                            @endphp
                                             <a class="product-gallery-item {{ $loop->first ? 'active' : '' }}"
-                                                href="#" data-image="{{ asset('images/products/' . $image->image) }}"
-                                                data-zoom-image="{{ asset('images/products/' . $image->image) }}">
-                                                <img src="{{ asset('images/products/' . $image->image) }}"
-                                                    alt="{{ $product->name }}" class="img-fluid">
+                                                href="#" data-image="{{ $imgSrc }}"
+                                                data-zoom-image="{{ $imgSrc }}">
+                                                <img src="{{ $imgSrc }}" alt="{{ $product->name }}"
+                                                    class="img-fluid">
                                             </a>
                                         @endforeach
                                     </div>

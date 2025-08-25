@@ -53,11 +53,11 @@
                     <i class="fas fa-shopping-bag"></i> Products
                 </a>
             </li>
-            <li>
+            {{-- <li>
                 <a href="{{ route('coupon') }}" class="{{ request()->routeIs('coupon*') ? 'active' : '' }}">
                     <i class="fas fa-ticket"></i> Coupons
                 </a>
-            </li>
+            </li> --}}
             <li>
                 <a href="{{ route("all_orders") }}" class="{{ request()->routeIs('all_orders*') ? 'active' : '' }}">
                     <i class="fas fa-shopping-cart"></i> All Orders
