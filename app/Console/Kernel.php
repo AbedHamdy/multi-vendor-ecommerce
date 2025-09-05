@@ -14,7 +14,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $schedule->command('subscriptions:notify-expiring')->dailyAt('09:00');
-        $schedule->command('coupons:send')->dailyAt('11:00');
+        $schedule->command('coupons:send')->dailyAt('23:50');
     }
 
     /**

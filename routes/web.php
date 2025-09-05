@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\VendorController;
 use App\Http\Controllers\Admin\PackageController;
 use App\Http\Controllers\Auth\LoginController;
 // use App\Http\Controllers\Cient\OrderController;
+use App\Http\Controllers\ChangePasswordController;
 use App\Http\Controllers\Client\OrderController;
 use App\Http\Controllers\Client\ViewProductController;
 use App\Http\Controllers\Client\HomeController;
@@ -111,6 +112,11 @@ Route::middleware(["admin"])->group(function(){
     Route::get("/dashboard/admin/edit/{id}" , [CouponsController::class, "edit"])->name("coupon.edit");
     Route::put("/dashboard/admin/update/{id}" , [CouponsController::class, "update"])->name("coupon.update");
     Route::delete("/dashboard/admin/delete/{id}" , [CouponsController::class, "destroy"])->name("coupon.delete");
+
+    // Change Password (Admin)
+    Route::get('/dashboard/admin/change-password', [ChangePasswordController::class, 'edit'])->name('admin.change_password');
+    Route::put('/dashboard/admin/change-password/update', [ChangePasswordController::class, 'update'])->name('admin.change_password.update');
+
 });
 
 // Vendor
@@ -148,16 +154,15 @@ Route::middleware(["vendor"])->group(function(){
 
     // Order
     Route::get("/dashboard/vendor/all-orders", [OrderVendorController::class, "index"])->name("all_orders");
-    Route::get("/dashboard/vendor/orders/{order_id}/{product_id}", [OrderVendorController::class, "show"])
-        ->name("vendor.orders.show");
-    Route::post("/dashboard/vendor/orders/{order_id}/{product_id}/confirm", [OrderVendorController::class, "confirm"])
-        ->name("vendor.orders.confirm");
-    Route::post("/dashboard/vendor/orders/{order_id}/{product_id}/ship", [OrderVendorController::class, "ship"])
-        ->name("vendor.orders.ship");
-    Route::post("/dashboard/vendor/orders/{order_id}/{product_id}/deliver", [OrderVendorController::class, "deliver"])
-        ->name("vendor.orders.deliver");
-    Route::post("/dashboard/vendor/orders/{order_id}/{product_id}/cancel", [OrderVendorController::class, "cancel"])
-        ->name("vendor.orders.cancel");
+    Route::get("/dashboard/vendor/orders/{order_id}/{product_id}", [OrderVendorController::class, "show"])->name("vendor.orders.show");
+    Route::post("/dashboard/vendor/orders/{order_id}/{product_id}/confirm", [OrderVendorController::class, "confirm"])->name("vendor.orders.confirm");
+    Route::post("/dashboard/vendor/orders/{order_id}/{product_id}/ship", [OrderVendorController::class, "ship"])->name("vendor.orders.ship");
+    Route::post("/dashboard/vendor/orders/{order_id}/{product_id}/deliver", [OrderVendorController::class, "deliver"])->name("vendor.orders.deliver");
+    Route::post("/dashboard/vendor/orders/{order_id}/{product_id}/cancel", [OrderVendorController::class, "cancel"])->name("vendor.orders.cancel");
+
+    // Change Password (Vendor)
+    Route::get('/dashboard/vendor/change-password', [ChangePasswordController::class, 'edit'])->name('vendor.change_password');
+    Route::put('/dashboard/vendor/change-password/update', [ChangePasswordController::class, 'update'])->name('vendor.change_password.update');
 });
 
 // Client

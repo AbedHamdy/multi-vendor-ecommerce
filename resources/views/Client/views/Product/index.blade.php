@@ -78,8 +78,7 @@
                             <div class="product-media">
                                 {{-- @dd($product->images) --}}
                                 @if ($product->images->isNotEmpty())
-                                    <a href="{{ route('product.show', $product->id) }}">
-                                        {{-- لو الصورة اللي في الداتا بيز عبارة عن لينك خارجي --}}
+                                    <a href="{{ route('view_product.show', $product->id) }}">
                                         @php
                                             $img = $product->images->first()->image;
                                             $imgSrc = Str::startsWith($img, ['http://', 'https://'])
@@ -90,7 +89,7 @@
                                             class="product-image card-img-top">
                                     </a>
                                 @else
-                                    <a href="{{ route('product.show', $product->id) }}">
+                                    <a href="{{ route('view_product.show', $product->id) }}">
                                         {{-- fallback للصورة الافتراضية --}}
                                         <img src="{{ asset('images/products/elements/product-2.jpg') }}" alt="No Image"
                                             class="product-image card-img-top">

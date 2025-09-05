@@ -27,7 +27,7 @@ class ViewProductController extends Controller
 
         $productsQuery->where('is_active', true);
 
-        $products = $productsQuery->paginate()->appends($request->query());
+        $products = $productsQuery->paginate(16)->appends($request->query());
         // dd($products);
 
         return view("Client.views.Product.index", compact("products", "AllDepartments"));

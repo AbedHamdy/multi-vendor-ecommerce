@@ -6,10 +6,10 @@
         <div class="logo">Dashboard</div>
     </div>
     <div class="navbar-right">
-        <div class="search-box">
+        {{-- <div class="search-box">
             <input type="text" placeholder="Search...">
             <i class="fas fa-search"></i>
-        </div>
+        </div> --}}
         <div class="navbar-icons">
 
             @php
@@ -39,8 +39,16 @@
                 @endif
             </a>
 
-            <button><i class="fas fa-user"></i></button>
-            <button><i class="fas fa-cog"></i></button>
+            <a href="{{ auth()->guard('admin')->check()
+                ? route('admin.change_password')
+                : (auth()->guard('vendor')->check()
+                    ? route('vendor.change_password')
+                    : route('login')) }}"
+            class="position-relative btn btn-light">
+                <i class="fas fa-user"></i>
+            </a>
+
+
         </div>
     </div>
 </nav>

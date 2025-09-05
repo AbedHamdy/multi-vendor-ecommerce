@@ -43,6 +43,7 @@ class OrderController extends Controller
 
             $usedBefore = CouponUser::where('user_id', $user->id)
                 ->where('coupon_id', $coupon->id)
+                ->where("used" , true)
                 ->first();
 
             if ($usedBefore)
@@ -171,6 +172,10 @@ class OrderController extends Controller
                 Notification::send($admins, new AdminNewOrderNotification($order));
 
                 Cart::where('user_id', $user->id)->delete();
+                $usedBefore->update([
+                    "used" => true,
+                ]);
+
                 DB::commit();
                 return redirect()->route("view_product")->with("success" , "Order placed successfully.");
             }
@@ -377,6 +382,7 @@ class OrderController extends Controller
             CouponUser::create([
                 'user_id' => $user->id,
                 'coupon_id' => $coupon->id,
+                "used" => true,
             ]);
 
             $coupon->update([

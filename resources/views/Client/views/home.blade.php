@@ -19,7 +19,16 @@
     <!-- Theme CSS -->
     <link rel="stylesheet" href="{{ asset('css/main.min.css') }}">
     {{-- <link rel="stylesheet" href="{{ asset('fonts/icon51c1.eot') }}"> --}}
-
+    <style>
+        .fixed-image {
+            width: 500px;
+            height: 385px;
+            object-fit: cover;
+            /* يخلي الصورة تملأ الإطار مع قص الزوايد */
+            border-radius: 8px;
+            /* اختياري لو عايز زوايا ناعمة */
+        }
+    </style>
 </head>
 
 <body>
@@ -88,7 +97,7 @@
                 <!-- أسماء الأقسام -->
                 <div class="demo-filter menu">
                     @foreach ($departments as $index => $department)
-                        <a href="#" class="category-tab {{ $index == 0 ? 'active' : '' }}"
+                        <a href="" class="category-tab {{ $index == 0 ? 'active' : '' }}"
                             data-category="{{ $department->id }}">
                             {{ $department->name }}
                         </a>
@@ -101,14 +110,22 @@
                         @foreach ($department->products as $product)
                             <div class="iso-item col-sm-6 col-md-4 col-lg-3 products-{{ $department->id }}"
                                 style="{{ $departmentIndex == 0 ? 'display: block;' : 'display: none;' }}">
-                                <a href="{{ route('product.show', $product->id) }}">
-                                    <img src="{{ $product->mainImage ? asset('images/products/' . $product->mainImage->image) : asset('images/demos/demo-2/banners/banner-1.jpg') }}"
-                                        width="500" height="385" alt="{{ $product->name }}">
-                                    <h5>{{ $product->name }}</h5>
-                                    {{-- @if ($product->price)
+                                {{-- <a href="{{ route('view_product.show', $product->id) }}"> --}}
+                                <a href="{{ route('view_product.show', $product->id) }}">
+                                    <img src="{{ $product->images->isNotEmpty()
+                                        ? (Str::startsWith($product->images->first()->image, ['http://', 'https://'])
+                                            ? $product->images->first()->image
+                                            : asset('images/products/' . $product->images->first()->image))
+                                        : asset('images/products/elements/product-2.jpg') }}"
+                                        alt="{{ $product->name }}" class="product-image card-img-top fixed-image">
+                                </a>
+
+
+                                <h5>{{ $product->name }}</h5>
+                                {{-- @if ($product->price)
                                         <p class="product-price">${{ number_format($product->price, 2) }}</p>
                                     @endif --}}
-                                </a>
+                                {{-- </a> --}}
                             </div>
                         @endforeach
                     @endforeach
@@ -206,7 +223,7 @@
                         class="icon-star"></i><i class="icon-star"></i>
                 </div>
                 <p>
-                    <a class="btn btn-primary btn-outline" href="{{ route('view_packages') }}">
+                    <a class="btn btn-primary btn-outline" href="{{ route('view_product') }}">
                         <i class="icon-shopping-cart"></i> Start Shopping
                     </a>
                 </p>
@@ -221,9 +238,12 @@
                 </div>
                 <div class="col-md-6 text-center text-md-right social-icons">
                     <label class="mr-3">Social Media</label>
-                    <a href="https://www.facebook.com/abdo.hamdy.169656" title="Facebook"><i class="icon-facebook-f"></i></a>
-                    <a href="https://x.com/Abdelrahman9129?t=sfQyIA9nwodVmRFhJ1IiDg&s=08" title="Twitter"><i class="icon-twitter"></i></a>
-                    <a href="https://www.instagram.com/abed___hamdy/?utm_source=qr&igsh=bDFwaTZlaXlwOWth#" title="Instagram"><i class="icon-instagram"></i></a>
+                    <a href="https://www.facebook.com/abdo.hamdy.169656" title="Facebook"><i
+                            class="icon-facebook-f"></i></a>
+                    <a href="https://x.com/Abdelrahman9129?t=sfQyIA9nwodVmRFhJ1IiDg&s=08" title="Twitter"><i
+                            class="icon-twitter"></i></a>
+                    <a href="https://www.instagram.com/abed___hamdy/?utm_source=qr&igsh=bDFwaTZlaXlwOWth#"
+                        title="Instagram"><i class="icon-instagram"></i></a>
                 </div>
             </div>
         </footer>
