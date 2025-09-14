@@ -100,6 +100,11 @@
                                 <li><a href="{{ route('login') }}">Login</a></li>
                             </ul>
                         </li>
+
+                        <li class="megamenu-container {{ request()->routeIs('client.orders') ? 'active' : '' }}">
+                            <a href="{{ route('client_orders') }}">My Orders</a>
+                        </li>
+
                     </ul><!-- End .menu -->
                 </nav><!-- End .main-nav -->
             </div><!-- End .header-left -->

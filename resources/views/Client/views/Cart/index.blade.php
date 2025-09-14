@@ -356,7 +356,7 @@
                 <i class="fas fa-shopping-cart"></i>
                 <h3 class="mb-3">Your cart is empty</h3>
                 <p class="text-muted mb-4">Looks like you haven't added any items to your cart yet.</p>
-                <a href="" class="continue-shopping">
+                <a href="{{ route("view_product") }}" class="continue-shopping">
                     <i class="fas fa-shopping-bag me-2"></i> Start Shopping
                 </a>
             </div>

@@ -369,26 +369,28 @@ class OrderController extends Controller
             $deliveryFee = 10;
             $taxPercent = 10;
 
-            if($coupon->discount_type == "fixed")
+            if (!empty($coupon))
             {
-                $subtotal -= $coupon->value;
+                if($coupon->discount_type == "fixed")
+                {
+                    $subtotal -= $coupon->value;
+                }
+                else if($coupon->discount_type == "percent")
+                {
+                    $subtotal -= ($subtotal * ($coupon->value / 100));
+                }
+
+                // Mark coupon as used by the user
+                CouponUser::create([
+                    'user_id' => $user->id,
+                    'coupon_id' => $coupon->id,
+                    "used" => true,
+                ]);
+
+                $coupon->update([
+                    "used_times" => $coupon->used_times + 1,
+                ]);
             }
-            else if($coupon->discount_type == "percent")
-            {
-                $subtotal -= ($subtotal * ($coupon->value / 100));
-            }
-
-            // Mark coupon as used by the user
-            CouponUser::create([
-                'user_id' => $user->id,
-                'coupon_id' => $coupon->id,
-                "used" => true,
-            ]);
-
-            $coupon->update([
-                "used_times" => $coupon->used_times + 1,
-            ]);
-
 
             $tax = $subtotal * ($taxPercent / 100);
             $finalTotal = $subtotal + $tax + $deliveryFee;
@@ -444,9 +446,24 @@ class OrderController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function myOrders()
     {
-        //
+        // dd("abed");
+        $user = Auth::guard("web")->user();
+        // dd($user);
+
+        // $orders = Order::where("user_id" , $user->id)->get();
+        $orders = Order::where("user_id", $user->id)
+            ->whereIn("status", ['pending', 'paid', 'shipped'])
+            ->get();
+
+        if(!$orders)
+        {
+            return redirect()->back()->with("error" , "Your cart is empty. Please add some items before proceeding to checkout.");
+        }
+
+        // dd($orders);
+        return view("Client.views.MyOrders" , compact("orders"));
     }
 
     /**

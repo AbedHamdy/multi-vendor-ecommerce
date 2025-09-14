@@ -172,6 +172,7 @@ Route::get("/package/subscribe/{id}", [PackagesController::class, "subscribe"])-
 // Route::get("/all-departments", [ClientDepartmentController::class, "index"])->name("view_department");
 Route::get("/all-products", [ViewProductController::class, "index"])->name("view_product");
 Route::get("/product/show/{id}", [ViewProductController::class, "show"])->name("view_product.show");
+Route::get('/my-orders', [OrderController::class, 'myOrders'])->name('client_orders');
 
 
 
