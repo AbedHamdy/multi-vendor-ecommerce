@@ -24,7 +24,8 @@
             }
             // dd(env('STRIPE_SECRET'));
 
-            \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+            // \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+            \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
 
             $session = \Stripe\Checkout\Session::create([
                 'payment_method_types' => ["card"],
@@ -39,8 +40,8 @@
                     'quantity' => 1,
                 ]],
                 'mode' => 'payment',
-                // 'success_url' => route('payment.success' , ['package_id' => $package->id]),
-                'success_url' => url('/payment/success/' . $package->id),
+                'success_url' => route('payment.success' , ['package_id' => $package->id]),
+                // 'success_url' => url('/payment/success/' . $package->id),
                 'cancel_url' => route('payment.cancel'),
             ]);
 

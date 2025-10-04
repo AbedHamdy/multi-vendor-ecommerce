@@ -19,8 +19,10 @@ class SendSubscriptionExpiringEmail implements ShouldQueue
 
     /**
      * Create a new job instance.
+     *
+     * @param \App\Models\Subscription $subscription
      */
-    public function __construct($subscription)
+    public function __construct(Subscription $subscription)
     {
         $this->subscription = $subscription;
     }

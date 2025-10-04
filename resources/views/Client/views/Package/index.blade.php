@@ -82,11 +82,11 @@
                                 <!-- Action Buttons -->
                                 <div class="mt-4 pt-3 border-top">
                                     <div class="d-grid gap-2">
-                                        <button class="btn btn-primary btn-lg"
+                                        {{-- <button class="btn btn-primary btn-lg"
                                                 onclick="selectPackage({{ $package->id }})">
                                             <i class="fas fa-shopping-cart me-2"></i>
                                             Choose This Plan
-                                        </button>
+                                        </button> --}}
                                         <button class="btn btn-outline-secondary"
                                                 onclick="showPackageDetails({{ $package->id }})">
                                             <i class="fas fa-info-circle me-2"></i>
@@ -188,19 +188,19 @@
     </style>
 
     <script>
-        function selectPackage(packageId) {
-            console.log('Selected package:', packageId);
-            Swal.fire({
-                title: 'Package Selected',
-                text: 'Redirecting to checkout...',
-                icon: 'success',
-                confirmButtonText: 'Continue'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = '/package/subscribe/' + packageId;
-                }
-            });
-        }
+        // function selectPackage(packageId) {
+        //     console.log('Selected package:', packageId);
+        //     Swal.fire({
+        //         title: 'Package Selected',
+        //         text: 'Redirecting to checkout...',
+        //         icon: 'success',
+        //         confirmButtonText: 'Continue'
+        //     }).then((result) => {
+        //         if (result.isConfirmed) {
+        //             window.location.href = '/package/subscribe/' + packageId;
+        //         }
+        //     });
+        // }
 
         function showPackageDetails(packageId) {
             console.log('Show details for package:', packageId);

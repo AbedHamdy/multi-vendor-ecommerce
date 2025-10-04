@@ -56,7 +56,7 @@ class PaymentController extends Controller
         catch (\Exception $e)
         {
             DB::rollback();
-            return redirect()->route('home')->with('error', "Error" . $e->getMessage());
+            return redirect()->route('view_packages')->with('error', "Error send mail to vendor.");
         }
         // $request->session()->put('has_paid', true);
     }

@@ -167,14 +167,13 @@ class OrderController extends Controller
                     "total_price" => $finalTotal,
                 ]);
 
-                // dd($order);
                 $admins = Admin::all();
                 Notification::send($admins, new AdminNewOrderNotification($order));
 
                 Cart::where('user_id', $user->id)->delete();
-                $usedBefore->update([
-                    "used" => true,
-                ]);
+                // $usedBefore->update([
+                //     "used" => true,
+                // ]);
 
                 DB::commit();
                 return redirect()->route("view_product")->with("success" , "Order placed successfully.");
@@ -182,7 +181,7 @@ class OrderController extends Controller
             catch(\Exception $e)
             {
                 DB::rollBack();
-                return redirect()->back()->with("error" , "field submit payment , please try again.");
+                return redirect()->back()->with("error" , "field submit payment , please try again." . $e->getMessage())->withInput();
             }
         }
         else if($data["payment_method"] == "stripe")
@@ -190,7 +189,8 @@ class OrderController extends Controller
             try
             {
                 $cartItems = Cart::where("user_id", $user->id)->get();
-                \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+                // \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+                \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
 
                 $lineItems = [];
                 $subtotal = 0;
@@ -274,7 +274,7 @@ class OrderController extends Controller
             }
             catch(\Exception $e)
             {
-                return redirect()->route('select_payment')->with('error', 'There was a problem connecting to the payment gateway. Please try again.')->withInput();
+                return redirect()->route('select_payment')->with('error', 'There was a problem connecting to the payment gateway. Please try again.' . $e->getMessage())->withInput();
             }
         }
         else
@@ -292,8 +292,10 @@ class OrderController extends Controller
         $sessionId = $request->get('session_id');
         // dd($sessionId);
         if(!$sessionId) return redirect()->route('select_payment');
-        \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+        // \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
         $session = \Stripe\Checkout\Session::retrieve($sessionId);
+
         $metadata = $session->metadata;
         // dd($metadata);
 
